@@ -22,7 +22,7 @@ function ModifyClient() {
     const [client, setClient] = useState(new ClientModel());
     // implement useState to create a object that will contain error messages for each input field
     const [errors, setErrors] = useState({});
-    const [neighborhoods, setNeighborhoods] = useState([]);
+    // ====== for use in the future const [neighborhoods, setNeighborhoods] = useState([]);
     // take the client id from url 
     const { id } = useParams();
 
@@ -35,7 +35,7 @@ function ModifyClient() {
             .then(res => {
                 console.log(res.data)
                 // store client fetch from api in a state variable 
-                setClient(res.data);
+                setClient(res.data.client);
             })// print error message if error happends
             .catch(error => {
                 console.log(error);
@@ -44,7 +44,7 @@ function ModifyClient() {
     }, []);
 
     // =========== make call to neighborhoods endpoint and get a list of them =======
-    useEffect(() => {
+   /** useEffect(() => {
         // http://localhost:8080/api/v1/clients/:id
         axios.get(env.mainUrl + "/neighborhoods")
 
@@ -59,6 +59,7 @@ function ModifyClient() {
 
             });
     }, []);
+    */
 
     // ======= make put request to clients/:id/ endpoint and modify previous client data for more recent one =======
     function putClient(data, id) {
@@ -68,7 +69,7 @@ function ModifyClient() {
                 console.log(res.data);
                 setTimeout(() => {
                     setLoading(false);
-                    navigate("/clients");
+                    navigate("/clients/" + id + "/details");
                 }, 4000)
             })
             .catch(error => {
@@ -106,11 +107,11 @@ function ModifyClient() {
         // create other object with error messages
         const foundErros = {};
 
-        if (client.first_name === "" || client.first_name === undefined) {
-            foundErros.first_name = "The first name is mandatory";
+        if (client.name === "" || client.name === undefined) {
+            foundErros.name = "The name is mandatory";
         };
-        if (client.first_lastname === "" || client.first_lastname === undefined) {
-            foundErros.first_lastname = "The first last name is mandatory";
+        if (client.lastname === "" || client.lastname === undefined) {
+            foundErros.lastname = "The last name is mandatory";
         };
         if (client.phone === "" || client.phone === undefined) {
             foundErros.phone = "The phone is mandatory";
@@ -119,9 +120,12 @@ function ModifyClient() {
             foundErros.address = "The address is mandatory";
         };
 
+       /* ====== use this functionaliti in the future ======
         if (client.neighborhood?.id === "" || client.neighborhood === undefined) {
             foundErros.address = "The address is mandatory";
         };
+        */
+       
         // take the error that have been found in the form and 
         // store them in the errors object 
         setErrors(foundErros);
@@ -179,60 +183,32 @@ function ModifyClient() {
                                 value={id}
                                 disabled />
                         </div>
+                        
                         <div className="mb-3">
-                            <label className="form-label" for="id_card">CC</label>
+                            <label className="form-label" for="name">Nombre</label>
                             <input
                                 className="form-control"
-                                id="id_card"
-                                name='dni'
+                                id="name"
+                                name='name'
                                 type="text"
-                                value={client.dni}
+                                value={client.name}
                                 onChange={(e) => { handleInput(e) }} />
+                            {errors.name && (<p style={{ color: "red" }} > {errors.name}</p>)}
                         </div>
+                        
                         <div className="mb-3">
-                            <label className="form-label" for="first_name">Primer nombre</label>
+                            <label className="form-label" for="lastname">Apellido</label>
                             <input
                                 className="form-control"
-                                id="first_name"
-                                name='first_name'
+                                id="lastname"
+                                name='lastname'
                                 type="text"
-                                value={client.first_name}
+                                value={client.lastname}
                                 onChange={(e) => { handleInput(e) }} />
-                            {errors.first_name && (<p style={{ color: "red" }} > {errors.first_name}</p>)}
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label" for="secund_name">Segundo nombre</label>
-                            <input
-                                className="form-control"
-                                id="secund_name"
-                                name='secund_name'
-                                type="text"
-                                value={client.secund_name}
-                                onChange={(e) => { handleInput(e) }} />
+                            {errors.lastname && (<p style={{ color: "red" }} > {errors.lastname}</p>)}
 
                         </div>
-                        <div className="mb-3">
-                            <label className="form-label" for="first_lastname">Primer apellido</label>
-                            <input
-                                className="form-control"
-                                id="first_lastname"
-                                name='first_lastname'
-                                type="text"
-                                value={client.first_lastname}
-                                onChange={(e) => { handleInput(e) }} />
-                            {errors.first_lastname && (<p style={{ color: "red" }} > {errors.first_lastname}</p>)}
-
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label" for="secund_lastname">Segundo apellido</label>
-                            <input
-                                className="form-control"
-                                id="secund_lastname"
-                                name='secund_lastname'
-                                type="text"
-                                value={client.secund_lastname}
-                                onChange={(e) => { handleInput(e) }} />
-                        </div>
+                        
                     </div>
                     <div className="col-md-6 col-12">
                         <div className="mb-3">
@@ -259,34 +235,15 @@ function ModifyClient() {
                             {errors.address && (<p style={{ color: "red" }} > {errors.address}</p>)}
 
                         </div>
-                        <div className="mb-3">
-                            <label className="form-label" for="neighborhood">Barrio</label>
-                            <select
-                                className="form-select"
-                                id="neighborhood"
-                                name='neighborhood'
-                                value={client.neighborhood?.id}
-                                onChange={(e) => handleInput(e)}>
-                                <option value={client.neighborhood?.id}>{client.neighborhood?.name}</option>
-                                {
-                                    // iterate the neighborhood array and return a option element for each neighborhood
-                                    neighborhoods.map(neighborhood => (
-                                        <option key={neighborhood.id} value={neighborhood.id}>{neighborhood.name}</option>
-                                    ))
-
-                                }
-
-                            </select>
-                            {errors.neighborhood && (<p style={{ color: "red" }} > {errors.neighborhood}</p>)}
-                        </div>
+                       
 
                     </div>
                 </div>
                 <div className="mb-3 text-center">
                     <button className="btn btn-success mx-1" type="submit" >
-                        {loading ? <Spinner/> : "Añadir"}
+                        {loading ? <Spinner/> : "Modificar"}
                         </button>
-                    <Link className="btn btn-danger mx-1" to="/clients" >Cancelar</Link>
+                    <Link className="btn btn-danger mx-1" to={"/clients/" + id + "/details"} >Cancelar</Link>
                 </div>
             </form>
 

@@ -46,13 +46,10 @@ function CreateClient() {
     // defining an object with all the required data 
     const [formData, setFormData] = useState(
         {
-            dni: "",
-            first_name: "",
-            secund_name: "",
-            first_lastname: "",
-            secund_lastname: "",
-            phone: "",
-            address: "",
+            "name": "",
+            "lastname": "",
+            "phone": "",
+            "address": ""
 
         }
     );
@@ -63,11 +60,12 @@ function CreateClient() {
     // implement useState to create a object that will contain error messages for each input field
     const [errors, setErrors] = useState({});
     // create a state for an array of neighborhoods
-    const [neighborhoods, setNeighborhoods] = useState([]);
+    // ========== use in the future const [neighborhoods, setNeighborhoods] = useState([]);
     const navigate = useNavigate();
 
     // make request to api neighborhood endpoind
-    useEffect(() => {
+    /**
+     *   useEffect(() => {
         // get the array of neighborhooods
         axios.get(env.mainUrl + "/neighborhoods")
             .then(response => {
@@ -76,6 +74,8 @@ function CreateClient() {
             .catch(error => { console.log(error) });
 
     }, []);
+     */
+
 
     // make post request to client api endpoint 
     function postClient(data) {
@@ -97,7 +97,7 @@ function CreateClient() {
             })
             .catch(error => {
                 console.error("Posting new client was not possible ! ", error);
-               
+
                 setTimeout(() => {
                     // set a time to set "loading" variable to false again
                     setLoading(false);
@@ -135,11 +135,11 @@ function CreateClient() {
         // create other object with error messages
         const foundErros = {};
 
-        if (formData.first_name === "") {
-            foundErros.first_name = "The first name is mandatory";
+        if (formData.name === "") {
+            foundErros.name = "The name is mandatory";
         };
-        if (formData.first_lastname === "") {
-            foundErros.first_lastname = "The first last name is mandatory";
+        if (formData.lastname === "") {
+            foundErros.lastname = "The last name is mandatory";
         };
         if (formData.phone === "") {
             foundErros.phone = "The phone is mandatory";
@@ -193,65 +193,37 @@ function CreateClient() {
             <h3 className="mt-3" >Añadir cliente</h3>
             {/** show a message when there is an error with the API */}
             {errors.api?.code && (<div style={{ color: "red" }} ><p>{errors.api?.code}. Error de connección a la API</p>
-            <p>El servidor no esta disponible en este momento. Intente luego nuevamente.</p></div>)}
+                <p>El servidor no esta disponible en este momento. Intente luego nuevamente.</p></div>)}
 
             { /** execute a function to handle the form when submit event is generate */}
             <form onSubmit={event => handleForm(event)} className="form-group mb-3">
                 <div className="row">
                     <div className="col-md-6 col-12">
+                    
                         <div className="mb-3">
-                            <label className="form-label" for="id_card">CC</label>
+                            <label className="form-label" for="name">Nombre</label>
                             <input
                                 className="form-control"
-                                id="id_card"
-                                name='id_card'
-                                type="number"
-                                value={formData.dni}
-                                onChange={(e) => { handleInput(e) }} />
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label" for="first_name">Primer nombre</label>
-                            <input
-                                className="form-control"
-                                id="first_name"
-                                name='first_name'
+                                id="name"
+                                name='name'
                                 type="text"
-                                value={formData.first_name}
+                                value={formData.name}
                                 onChange={(e) => { handleInput(e) }} />
-                            {errors.first_name && (<p style={{ color: "red" }} > {errors.first_name}</p>)}
+                            {errors.name && (<p style={{ color: "red" }} > {errors.name}</p>)}
                         </div>
+                       
                         <div className="mb-3">
-                            <label className="form-label" for="secund_name">Segundo nombre</label>
+                            <label className="form-label" for="lastname">Apellido</label>
                             <input
                                 className="form-control"
-                                id="secund_name"
-                                name='secund_name'
+                                id="lastname"
+                                name='lastname'
                                 type="text"
-                                value={formData.secund_name}
                                 onChange={(e) => { handleInput(e) }} />
+                            {errors.lastname && (<p style={{ color: "red" }} > {errors.lastname}</p>)}
 
                         </div>
-                        <div className="mb-3">
-                            <label className="form-label" for="first_lastname">Primer apellido</label>
-                            <input
-                                className="form-control"
-                                id="first_lastname"
-                                name='first_lastname'
-                                type="text"
-                                onChange={(e) => { handleInput(e) }} />
-                            {errors.first_lastname && (<p style={{ color: "red" }} > {errors.first_lastname}</p>)}
-
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label" for="secund_lastname">Segundo apellido</label>
-                            <input
-                                className="form-control"
-                                id="secund_lastname"
-                                name='secund_lastname'
-                                type="text"
-                                value={formData.secund_lastname}
-                                onChange={(e) => { handleInput(e) }} />
-                        </div>
+                       
                     </div>
                     <div className="col-md-6 col-12">
                         <div className="mb-3">
@@ -285,19 +257,19 @@ function CreateClient() {
                                 id="neighborhood"
                                 name='neighborhood'>
                                 <option >---</option>
-                                {
+                                {/** 
                                     // iterate the neighborhood array and return a option element for each neighborhood
                                     neighborhoods.map(neighborhood => (
                                         <option key={neighborhood.id} value={neighborhood.id}>{neighborhood.name}</option>
                                     ))
 
-                                }
+                                */}
                                 {/** some example neighborhoods */}
                                 <option value={"Caracoles"} >Caracoles</option>
                                 <option value={"Central"} >La Central</option>
 
                             </select>
-                            {errors.neighborhood && (<p style={{ color: "red" }} > {errors.neighborhood}</p>)}
+                            {/* errors.neighborhood && (<p style={{ color: "red" }} > {errors.neighborhood}</p>) */}
                         </div>
 
                     </div>
@@ -329,7 +301,7 @@ function CreateClient() {
                                     // request to the api since it is possible in the 
                                     // first render of the component
 
-                                    if (formData.first_name !== "") {
+                                    if (formData.name !== "") {
                                         postClient(formData)
                                     }
                                 }

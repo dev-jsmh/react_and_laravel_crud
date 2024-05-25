@@ -12,8 +12,8 @@ export default function NotFound() {
 // returns a page with a message when resource is not found
     return (
       
-        <div class="row">
-            <div class="col-12 mt-5 text-center">
+        <div className="row">
+            <div className="col-12 mt-5 text-center">
                 <h1>Pagina en desarrollo</h1>
                 <p>
                     Esta función esta en desarrollo
@@ -21,9 +21,9 @@ export default function NotFound() {
                 <p>
                     Muy pronto estará disponible
                 </p>
-                <div class="img">
-                    <i class="bi bi-tools" style="font-size: 3rem;
-                    font-weight: bold;color: aliceblue;"></i>
+                <div className="img">
+                    <i className="bi bi-tools" style={{fontSize: "3rem",
+                    fontWeight: "bold",color: "aliceblue"}}></i>
                 </div>
                <BackButton></BackButton>
             </div>

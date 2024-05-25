@@ -44,9 +44,9 @@ export default function Home() {
 
 
           <Link className="btn btn-primary text-decoration-none col-12 col-md-5 p-4 mb-4 mx-2" to="clients" >clientes</Link>
-          <Link className="btn btn-primary text-decoration-none col-12 col-md-5 p-4 mb-4 mx-2" to="clients" >Inventario</Link>
-          <Link className="btn btn-primary text-decoration-none col-12 col-md-5 p-4 mb-4 mx-2" to="clients" >Facturas</Link>
-          <Link className="btn btn-primary text-decoration-none col-12 col-md-5 p-4 mb-4 mx-2" to="clients" >Agendación de Servicios</Link>
+          <Link className="btn btn-primary text-decoration-none col-12 col-md-5 p-4 mb-4 mx-2" to="development" >Inventario</Link>
+          <Link className="btn btn-primary text-decoration-none col-12 col-md-5 p-4 mb-4 mx-2" to="development" >Facturas</Link>
+          <Link className="btn btn-primary text-decoration-none col-12 col-md-5 p-4 mb-4 mx-2" to="development" >Agendación de Servicios</Link>
 
         </div>
       </div>

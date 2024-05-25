@@ -50,7 +50,7 @@ class ClientController extends Controller
             $data = [
                 "message" => "client created successfully",
                 "status" => 201,
-                "data" => $newClient
+                "client" => $newClient
             ];
             // return success message and the found client
             return response()->json($data, 201);
@@ -70,7 +70,7 @@ class ClientController extends Controller
             $data = [
                 "message" => "Client found successfully",
                 "status" => 201,
-                "data" => $desiredClient
+                "client" => $desiredClient
             ];
             return response()->json($data, 201);
         } else {
@@ -101,7 +101,7 @@ class ClientController extends Controller
                 $data = [
                     "message" => "Client modified successfully.",
                     "status" => 201,
-                    "data" => $desiredClient
+                    "client" => $desiredClient
                 ];
                 // return client with message
                 return response()->json($data, 201);
@@ -145,7 +145,7 @@ class ClientController extends Controller
             $data = [
                 "message" => "Not possible to delete client N°: " . $id . ".",
                 "status" => 500,
-                "error" => $ex
+                "error" => $ex->getMessage()
             ];
             // return exception message 
             return response()->json($data, 500);

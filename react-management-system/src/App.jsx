@@ -24,23 +24,31 @@ import ModifyClient from './pages/clientModule/ModifyClient';
 import NotFound from './pages/NotFound';
 
 function App() {
- 
+
   return (
     <BrowserRouter>
-    <Routes>
-      <Route index element={<Home />} ></Route>
+      <Routes>
+        <Route index element={<Home />} ></Route>
 
-      <Route path='clients' element={<ClientsHome />} >
-        <Route index element={<ClientTable/>}/>
-        <Route path='create' element={<CreateClient />}></Route>
-        <Route path=':id/modify' element={<ModifyClient />}></Route>
-        <Route path=':id/details' element={<DetailsClient />}></Route>
-      </Route>
-      <Route path='*' element={<NotFound />} ></Route>
+        <Route path='clients' element={<ClientsHome />} >
+          <Route index element={<ClientTable />} />
+          <Route path='create' element={<CreateClient />}></Route>
+          <Route path=':id/modify' element={<ModifyClient />}></Route>
+          <Route path=':id/details' element={<DetailsClient />}></Route>
+        </Route>
 
-    </Routes>
-  </BrowserRouter>
+
+        <Route path='*' element={<NotFound />} ></Route>
+
+      </Routes>
+    </BrowserRouter>
   )
 }
+/**
+ * Jhonatan Samuel Martinez Hernandez 
+ * Ficha 2675859
+ * Analisis y Desarrollo de Software
+ * Año 2024
+ */
 
 export default App

@@ -93,9 +93,9 @@ function ClientTable() {
                                     client => (
                                         <tr key={client.id}>
                                             <th scope='row' >{client.id}</th>
-                                            <td>{client.first_name}</td>
-                                            <td>{client.first_lastname}</td>
-                                            <td>{client.neighborhood?.name}</td>
+                                            <td>{client.name}</td>
+                                            <td>{client.lastname}</td>
+                                            <td>{client.phone}</td>
                                             <td>
                                                 <Link className='btn btn-info' to={client.id + "/details"} ><i class="bi bi-eye"></i></Link>
                                             </td>

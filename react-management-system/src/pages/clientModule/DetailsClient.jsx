@@ -31,7 +31,7 @@ function DetailsClient() {
             .then(res => {
                 console.log(res.data)
                 // store client fetch from api in a state variable 
-                setClient(res.data);
+                setClient(res.data.client);
             })// print error message if error happends
             .catch(error => {
                 console.log(error);
@@ -82,8 +82,7 @@ function DetailsClient() {
                             </div>
                             <div className="mb-1">
                                 <p>
-                                    Nombre: {client.first_name} {client.secund_name} 
-                                    {client.first_lastname} {client.secund_lastname}
+                                    Nombre: {client.name} {client.lastname}
                                 </p>
                             </div>
                             <div className="mb-3">
@@ -93,14 +92,12 @@ function DetailsClient() {
                                 Dirección: {client.address}
                             </div>
                             <div className="mb-3">
-                                Barrio: {client.neighborhood?.name}
+                               create at: {client.created_at}
                             </div>
                             <div className="mb-3">
-                                Fecha ultimo mantenimiento: {client.last_maintenance}
+                            updated at: {client.updated_at}
                             </div>
-                            <div className="mb-3">
-                                Fecha proximo mantenimiento: {client.next_maintenance}
-                            </div>
+                           
                             {/** accion buttons */}
                             <div className="mb-3">
                                 <button className="btn btn-danger m-1"
