@@ -1,18 +1,12 @@
-/**
- * Jhonatan Samuel Martinez Hernandez 
- * Ficha 2675859
- * Analisis y Desarrollo de Software
- * Año 2024
- */
-import {useState } from 'react'
 
 
 
-// view that has a form where I can create products
-// and add their information to data base
-export function CreateProduct() {
 
-    function handleForm(ev){
+export default function ModifyProduct() {
+
+
+
+    function handleForm(ev) {
         ev.preventDefault();
         console.log(ev.target);
         console.log(ev.target.product_code.value);
@@ -20,10 +14,10 @@ export function CreateProduct() {
 
     return (
         <>
-           
+
             <h3 className="mt-3" >Añadir Producto</h3>
             { /** execute a function to handle the form when submit event is generate */}
-            <form onSubmit={(ev ) => { handleForm(ev) }} class="form-group">
+            <form onSubmit={(ev) => { handleForm(ev) }} class="form-group">
                 <div class="row">
                     <div class="col-md-6 col-12">
                         <div class="mb-3">
@@ -86,6 +80,5 @@ export function CreateProduct() {
         </>
 
     );
-};
 
-export default CreateProduct;
+}

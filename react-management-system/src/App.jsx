@@ -21,6 +21,13 @@ import ClientTable from './pages/clientModule/ClientTable';
 import CreateClient from './pages/clientModule/CreateClient';
 import DetailsClient from './pages/clientModule/DetailsClient'
 import ModifyClient from './pages/clientModule/ModifyClient';
+// ========== components related to products ==========
+import CreateProduct from './pages/products/CreateProduct.jsx';
+import ProductDetails from './pages/products/ProductDetails.jsx';
+import ModifyProduct from './pages/products/ModifyProduct.jsx';
+import ProductRootPage from './pages/products/ProductRootPage';
+import ProductTable from './pages/products/ProductTable.jsx';
+
 import NotFound from './pages/NotFound';
 
 function App() {
@@ -29,14 +36,20 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route index element={<Home />} ></Route>
-
+        {/** ======== routes related to clientes ======== */}
         <Route path='clients' element={<ClientsHome />} >
           <Route index element={<ClientTable />} />
           <Route path='create' element={<CreateClient />}></Route>
           <Route path=':id/modify' element={<ModifyClient />}></Route>
           <Route path=':id/details' element={<DetailsClient />}></Route>
         </Route>
-
+        {/** ======== routes related to products ======== */}
+        <Route path='products' element={<ProductRootPage/>}>
+          <Route index element={<ProductTable/>} ></Route>
+          <Route path='create' element={<CreateProduct />} ></Route>
+          <Route path=':id/details' element={<ProductDetails/>} />
+          <Route path=':id/modify' element={<ModifyProduct/>} ></Route>
+        </Route>
 
         <Route path='*' element={<NotFound />} ></Route>
 
