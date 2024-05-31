@@ -1,6 +1,8 @@
 
+import { Link } from 'react-router-dom';
 
-
+// this images if temporal
+import productImg from '../../../public/img/product_4.jpeg';
 
 export default function ModifyProduct() {
 
@@ -14,69 +16,80 @@ export default function ModifyProduct() {
 
     return (
         <>
+            <nav className="navbar navbar-expand-md bg-dark sticky-top" data-bs-theme="dark">
+                <div className="container-fluid">
+                    <Link to="../">
+                        <i className="bi-arrow-left" style={{ fontSize: "1.5rem", fontWeight: "bold", color: "white" }}></i>
+                    </Link>
+                </div>
+            </nav>
+            <div className="container">
+                <h3 className='mt-3' > Modificar Información del producto </h3>
 
-            <h3 className="mt-3" >Añadir Producto</h3>
-            { /** execute a function to handle the form when submit event is generate */}
-            <form onSubmit={(ev) => { handleForm(ev) }} class="form-group">
-                <div class="row">
-                    <div class="col-md-6 col-12">
-                        <div class="mb-3">
-                            <label class="form-label" for="product_code">Codigo producto</label>
-                            <input class="form-control" id="product_code" name='product_code' type="number" />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="product_name">Nombre</label>
-                            <input class="form-control" id="product_name" type="text" />
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div class="col-5 mb-3">
-                                <label class="form-label" for="">Modelo</label>
-                                <input class="form-control" id="" type="text" />
+                <img src={productImg} alt="" style={{height: 10 + 'rem', borderRadious: 0.3 + 'rem'}} />
+                { /** execute a function to handle the form when submit event is generate */}
+                <form onSubmit={(ev) => { handleForm(ev) }} className="form-group">
+                    <div className="row mt-3">
+                        <div className="col-md-6 col-12">
+                            <div className="mb-3">
+                                <label className="form-label" htmlFor="product_code">Codigo producto</label>
+                                <input className="form-control" id="product_code" name='product_code' type="number" disabled />
                             </div>
-                            <div class="col-5 mb-3">
-                                <label class="form-label" for="">Cantidad inicial</label>
-                                <input class="form-control" id="" type="number" />
+                            <div className="mb-3">
+                                <label className="form-label" htmlFor="product_name">Nombre</label>
+                                <input className="form-control" id="product_name" type="text" />
+                            </div>
+                            <div className="d-flex justify-content-between">
+                                <div className="col-5 mb-3">
+                                    <label className="form-label" htmlFor="">Modelo</label>
+                                    <input className="form-control" id="" type="text" />
+                                </div>
+                                <div className="col-5 mb-3">
+                                    <label className="form-label" htmlFor="">Cantidad inicial</label>
+                                    <input className="form-control" id="" type="number" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-12 col-md-6">
+                            {/**  
+                             * <div className="d-flex justify-content-between">
+                                <div className="col-5 mb-3">
+                                    <label className="form-label" htmlFor="product_category">Categoria</label>
+                                    <select className="form-control" id="product_category" type="text">
+                                        <option>Planta de agua</option>
+                                        <option>Cartuchos</option>
+                                        <option>Botones</option>
+                                        <option>Cables</option>
+                                    </select>
+                                </div>
+                                <div className="col-5 mb-3">
+                                    <label className="form-label" htmlFor="product_category_id">Id categoria</label>
+                                    <input className="form-control" id="product_category_id" type="text" />
+                                </div>
+                            </div>
+                            */}
+
+                            <div className="mb-3">
+                                <label className="form-label" htmlFor="">Descripción</label>
+                                <textarea className="form-control" id=""></textarea>
+                            </div>
+                            <div className="mb-3">
+                                <label className="form-label" htmlFor="">imagen</label>
+                                <input className="form-control" id="" type="file" />
+                            </div>
+                            <div className="mb-3">
+                                <img src="../../src/images/WhatsApp Image 2022-09-07 at 11.54.51 AM (1).jpeg" alt=""
+                                    style={{ height: "5rem" }} />
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-12 col-md-6">
-
-                        <div class="d-flex justify-content-between">
-                            <div class="col-5 mb-3">
-                                <label class="form-label" for="product_category">Categoria</label>
-                                <select class="form-control" id="product_category" type="text">
-                                    <option>Planta de agua</option>
-                                    <option>Cartuchos</option>
-                                    <option>Botones</option>
-                                    <option>Cables</option>
-                                </select>
-                            </div>
-                            <div class="col-5 mb-3">
-                                <label class="form-label" for="product_category_id">Id categoria</label>
-                                <input class="form-control" id="product_category_id" type="text" />
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="">Descripción</label>
-                            <textarea class="form-control" id=""></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="">imagen</label>
-                            <input class="form-control" id="" type="file" />
-                        </div>
-                        <div class="mb-3">
-                            <img src="../../src/images/WhatsApp Image 2022-09-07 at 11.54.51 AM (1).jpeg" alt=""
-                                style={{ height: "5rem" }} />
-                        </div>
+                    <div className="mb-3 text-center">
+                        <button className="btn btn-success mx-1" type="submit">Añadir</button>
+                        <Link className="btn btn-danger mx-1" to={"/products/8/details"}>Cancelar</Link>
                     </div>
-                </div>
-                <div class="mb-3 text-center">
-                    <button class="btn btn-success mx-1" type="submit">Añadir</button>
-                    <a class="btn btn-danger mx-1" href="">Cancelar</a>
-                </div>
-            </form>
-
+                </form>
+            </div>
         </>
 
     );
