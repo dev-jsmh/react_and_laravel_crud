@@ -8,6 +8,8 @@
  */
 
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ProductController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +28,15 @@ Route::put("/clients/{id}", [ClientController::class, "update"]);
 // === delete a client by id ==
 Route::delete("/clients/{id}", [ClientController::class, "destroy"]);
 
+// ======= router related to products =======
+
+Route::get("/products", [ProductController::class, "index"]);
+Route::get("/products/{id}", [ProductController::class, "show"]);
+Route::post("/products", [ProductController::class, "store"]);
+Route::put("/products/{id}", [ProductController::class, "update"]);
+Route::delete("/products/{id}", [ProductController::class, "destroy"]);
+
+Route::get('/product/images', [ProductController::class, 'getImages']);
 /**
  * Jhonatan Samuel Martinez Hernandez
  * Software Analyst and Development

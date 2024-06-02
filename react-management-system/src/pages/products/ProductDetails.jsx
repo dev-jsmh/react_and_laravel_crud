@@ -1,9 +1,43 @@
-import { Link } from 'react-router-dom';
+/**
+ * Jhonatan Samuel Martinez Hernandez 
+ * Ficha 2675859
+ * Analisis y Desarrollo de Software
+ * Año 2024
+ */
+
+import env from '../../env';
+import { Link, useParams } from 'react-router-dom';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+
+
 
 // this images if temporal
+import ProductModel from '../../models/ProductModel';
 import productImg from '../../../public/img/product_4.jpeg';
 
+
 function ProductDetails() {
+
+    // product state 
+    const [product, setProduct ] = useState( new ProductModel() );
+// extract the product id from the url 
+const {id} = useParams();
+
+// Get request to fecth a product by its id
+useEffect( 
+    () =>{
+
+        axios.get( `${env.mainUrl}/products/${id}`)
+        // print result in console
+        .then(res => {
+            console.log(res.data),
+            // set the fetched product data to the product state variable
+            setProduct(res.data.product)
+        } ) // log the error to the console
+        .catch( error => console.log(error))
+
+    } , []);
 
 
     return (
@@ -21,19 +55,34 @@ function ProductDetails() {
 
                 <div className="row mt-3">
                     <div className="col-md-4 col-12 mb-2">
-                        <img className="text-center"
-                            src={productImg}
-                            style={{ height: 10 + "rem", borderRadius: 1 + 'rem' }} alt="purificador de aguas" />
+
+                        { // render the product image if this existe 
+                           
+
+                            product?.image_url ?
+                            (
+                                <img className="text-center"
+                                src={product?.image_url}
+                                style={{ height: 10 + "rem", borderRadius: 1 + 'rem' }} alt="purificador de aguas" />
+                            ) : (  // else render a predefined default image
+                                <img className="text-center"
+                                src={productImg}
+                                style={{ height: 10 + "rem", borderRadius: 1 + 'rem' }} alt="purificador de aguas" />
+                            )
+                        }
                     </div>
                     <div className="col-md-4 col-12">
-                        <div className="mb-3">
-                            <p>Codigo producto: 18323</p>
+                    <div className="mb-3">
+                            <p>Id producto: {  product.id }</p>
                         </div>
                         <div className="mb-3">
-                            <p>Nombre: Purificador de agua</p>
+                            <p>Codigo producto: {  product.product_code }</p>
                         </div>
                         <div className="mb-3">
-                            <p>Modelo: Manzana verde</p>
+                            <p>Nombre: {  product.name }</p>
+                        </div>
+                        <div className="mb-3">
+                            <p>Modelo: {  product.model }</p>
                         </div>
 
                     </div>
@@ -42,7 +91,7 @@ function ProductDetails() {
                             <p>Valor de compra: 150.000</p>
                         </div>
                         <div className="col-5 mb-3">
-                            <p>Unidades disponibles: 12</p>
+                            <p>Unidades disponibles: {  product.stock } </p>
                         </div>
                     </div>
                     <div className="col-md-6 col-12">
@@ -59,7 +108,7 @@ function ProductDetails() {
                         */}
                         <div className="mb-3">
                             <label className="form-label" htmlFor="">Descripción</label>
-                            <textarea className="form-control" id=""></textarea>
+                            <textarea className="form-control" id="" value={  product.description } >  </textarea>
                         </div>
 
                     </div>
@@ -71,7 +120,7 @@ function ProductDetails() {
                             comprar
                         </button>
                         {/**  <!-- modificar producto --> */}
-                        <Link className="btn btn-success my-5 mx-2" type="button" to={"/products/8/modify"}>
+                        <Link className="btn btn-success my-5 mx-2" type="button" to={`/products/${id}/modify`}>
                             <i className="bi bi-save"></i>Modificar
                         </Link>
                     </div>

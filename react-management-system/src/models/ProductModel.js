@@ -10,11 +10,11 @@
  */
 export default class ProductModel {
 
-  productCode;
+  product_code;
   name;
   model;
   description;
   stock;
-  imageUr;
+  image_url;
   //category: CategoryOfProduct
 }

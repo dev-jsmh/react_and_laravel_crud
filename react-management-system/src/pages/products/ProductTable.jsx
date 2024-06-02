@@ -6,12 +6,32 @@
  */
 
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+
+import Spinner from '../../components/spinner';
 
 // this images if temporal
-import productImg from '../../../public/img/product_4.jpeg';
+import defaultProductImg from '../../../public/img/product_4.jpeg';
+import axios from 'axios';
 
+import env from '../../env';
 
 export default function ProductTable() {
+
+
+    // array of products 
+    const [products, setProducts] = useState([]);
+
+    // method to make get request and get all products from data base
+    useEffect(() => {
+        axios.get(env.mainUrl + '/products')
+            .then( // if request is successfull set the reponse to product
+                (res) => {
+                    setProducts(res.data)
+                }
+            )// if request fails print error in console
+            .catch(error => console.warn(error));
+    }, []);
 
 
     return (
@@ -58,31 +78,50 @@ export default function ProductTable() {
                 {/** ===== product container ===== */}
                 <div className="scrollable" style={{ height: "500px" }}>
                     <div className="row">
-                        {/** -- product item -- */}
-                        <div className="col-sm-12 col-md-4 col-lg-3 p-2">
-                            <div className="card">
-                                <div className="card-body">
-                                    <div className="col text-center mb-2">
-                                        <img src={productImg}
-                                            style={{ height: "9rem", borderRadius: "1rem" }} alt="purificador de aguas" />
-                                    </div>
-                                    <div className="col">
-                                        <p>id: 1823</p>
-                                        <p>Nombre: Purificador de agua </p>
-                                        <p>Modelo: Manzana verde</p>
-                                        <p>Unidades disponibles: 15</p>
-                                    </div>
-                                    {/** ==== buttons for manage products ==== */}
-                                    <div className="col">
-                                        <div className="d-flex justify-content-center">
-                                            <Link className="btn btn-primary m-2" to={"8/details"}>Detalles</Link>
+                        {/** -- product item -- */
+
+                            // if exists products in the data base render a card for each one
+                            products.length > 0 ? products.map(product => {
+                                return (<div key={product?.id} className="col-sm-12 col-md-4 col-lg-3 p-2">
+                                    <div className="card">
+                                        <div className="card-body">
+                                            <div className="col text-center mb-2">
+                                                {
+                                                    product?.image_url ?
+                                                        (
+                                                            <img src={product?.image_url}
+                                                                alt="purificador de aguas" style={{ height: "9rem", borderRadius: "0.5rem" }} />
+                                                        )
+                                                        : (
+                                                            <img src={defaultProductImg} style={{ height: "9rem", borderRadius: "0.5rem" }} />
+                                                        )
+                                                }
+
+                                            </div>
+                                            <div className="col">
+                                                <p>id: {product?.product_code}</p>
+                                                <p>Nombre: {product?.name}</p>
+                                                <p>Modelo: {product?.model}</p>
+                                                <p>Unidades disponibles: {product?.stock}</p>
+                                            </div>
+                                            {/** ==== buttons for manage products ==== */}
+                                            <div className="col">
+                                                <div className="d-flex justify-content-center">
+                                                    <Link className="btn btn-primary m-2" to={product?.id + "/details"}>Detalles</Link>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+                                </div>)
+                            }) : (
+                                // if ther are no products in the array render a spinner 
+                                <div className="text-center m-5" >
+                                    <Spinner></Spinner>
+
                                 </div>
-                            </div>
-                        </div>
+                            )
 
-
+                        }
                     </div>
                 </div>
             </div>
