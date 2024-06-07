@@ -13,6 +13,10 @@ SENA
 
 ## Client Module
 
+
+### Search Clients Bar
+Allows you to search a client by its name or lastname
+
 #### Home or Index
 Here you can find a table that contains all the registered clients in the data base, a boton to create a new client, and a button to delete a specified client.
 
@@ -25,3 +29,17 @@ you can view the information of a specified client using the ID. Also, you will 
 #### Modify
 Here you get a form that will contain information of a client and you will be able to modify it in case you need to. 
 
+### Delete Client
+
+## Product Module 
+
+### Search Products Bar
+Allows you to search a client by its name or lastname
+
+### Home or Index
+
+### Create new Product
+
+### View Details
+### Modify Product Info
+### Delete Product

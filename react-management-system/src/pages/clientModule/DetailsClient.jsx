@@ -5,6 +5,7 @@
  * Año 2024
  */
 
+import defaultUserImage from '../../../public/img/default_user_image.png';
 import { Link, useParams, useNavigate } from "react-router-dom";
 import BackButton from "./BackButton";
 import { useEffect, useState } from "react";
@@ -68,10 +69,10 @@ function DetailsClient() {
             </div>)}
             {/** <!-- informacion del cliente--> */}
             <div className="row  my-4 border">
-                <h3 className="text-center">Detalles del cliente</h3>
+                <h3 className="text-center my-2">Detalles del cliente</h3>
                 {/* foto del cliente*/}
-                <div className="col-md-4 mb-3">
-                    <img style={{ maxWidth: "13rem", height: "auto" }} src="" alt="client_profile_foto" />
+                <div className="col-md-4 mb-3 text-center">
+                    <img style={{ maxWidth: "13rem", height: "auto" }} src={defaultUserImage} alt="client_profile_foto" />
                 </div>
                 <div className="col-md-8 mb-3">
                     { /* información basica del cliente */}

@@ -5,6 +5,8 @@
  * Año 2024
  */
 
+
+import authorDeveloper from '../../public/img/jhonatan_author_developer_edit.jpg';
 import { Link } from 'react-router-dom';
 
 export default function Home() {
@@ -14,7 +16,7 @@ export default function Home() {
 
       <nav class="navbar navbar-expand-lg bg-body-terciary">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Navbar</a>
+          <img class="navbar-brand" src={authorDeveloper} style={{height: "5rem", borderRadius: "50%"}}></img>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
