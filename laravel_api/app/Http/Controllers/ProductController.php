@@ -107,11 +107,81 @@ class ProductController extends Controller
     // modify product info
     public function update(String $id, Request $request)
     {
+        try {
+            $desiredProduct = ProductModel::find($id);
+            // checke if the product variable is not empty
+            if (!empty($desiredProduct)) {
+
+                $desiredProduct->product_code = $request->product_code;
+                $desiredProduct->name = $request->name;
+                $desiredProduct->model = $request->model;
+                $desiredProduct->description = $request->description;
+                $desiredProduct->stock = $request->stock;
+
+                // validate file not empty
+                if (!empty($request->image)) {
+
+                    // generate a new name for the image gotten from the post request 
+                    //
+                    // example = 1717227327_fresa.jpeg
+                    $image_name = time() . '.' . $request->file('image')->getClientOriginalExtension();
+                    // store the image in the "storage/public/images" folder with the preveously generated name
+                    $request->file('image')->storeAs('public/images', $image_name);
+
+                    // set the path url to the product data
+                    $desiredProduct->image_url = 'http://localhost:8000/storage/images/' . $image_name;
+
+                    // delete the old image from the "storage/public/images" folder
+
+                }
+
+
+                $desiredProduct->save();
+
+                $data = [
+                    'message' => 'The product with id: ' .  $id . ' was updated successfully',
+                    'product' => $desiredProduct,
+                    'status' => 201
+                ];
+                // return the response
+                return response()->json($data, 201);
+            } else { // if product is empty ( not found ) run code below
+                $data = [
+                    'message' => 'Not possible to find the product with id: ' .  $id,
+                    'status' => 404
+                ];
+                return response()->json($data, 404);
+            }
+        } catch (Exception $ex) { // if the is an exception then, handle it here
+            $error = [
+                'message' => $ex,
+                'status' => 500
+            ];
+            // return the response
+            return response()->json($error, 500);
+        }
     }
 
     // delete a product by its id
     public function destroy(String $id)
     {
+        try {
+            $deleted = ProductModel::destroy($id);
+
+            if ($deleted) {
+                return response()->json("product " . $id . " delete successfully ", 200);
+            } else {
+                return response()->json("not possible to delete the product " . $id, 500);
+            }
+        } catch (Exception $ex) {
+            $data = [
+                'error' => $ex,
+                'message' => "something happended when trying to delte the product " . $id,
+
+            ];
+
+            return response()->json($data, 500);
+        }
     }
 
     public function getImages()

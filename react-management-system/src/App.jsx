@@ -8,9 +8,10 @@
 // ================ Imports goes here ================
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-
+// custom colors css
+ import './assets/css/app_main_custom_colors.css';
 // ================ Bootstrap CSS ================
-import './assets/css/bootstrap.min.css';
+import './assets/scss/custom_app_main.css';
 import './assets/js/bootstrap.bundle.min.js';
 import './assets/icons/font/bootstrap-icons.min.css';
 
@@ -27,7 +28,6 @@ import ProductDetails from './pages/products/ProductDetails.jsx';
 import ModifyProduct from './pages/products/ModifyProduct.jsx';
 import ProductRootPage from './pages/products/ProductRootPage';
 import ProductTable from './pages/products/ProductTable.jsx';
-
 import NotFound from './pages/NotFound';
 
 function App() {

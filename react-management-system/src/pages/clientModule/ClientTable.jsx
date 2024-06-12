@@ -95,7 +95,7 @@ function ClientTable() {
             {/** clients*/}
             <div class="scrollable" style={{ height: "400px", overflowY: "scroll" }}>
                 <div id="clients">
-                    <table class="table table-dark table-striped">
+                    <table class="table table-light table-striped">
                         <thead>
                             <tr>
                                 <th scope="col">Cc</th>
@@ -140,7 +140,7 @@ function ClientTable() {
                         </tbody>
                     </table>
                     {// if there is no cliente that match the search params print a message saying it to the client
-                   filteredClients == 0 && loadingClients == false && (<p className="text-center my-5" style={{fontSize: "1.5rem"}}>No hay clientes que concuerden con la busqueda "{inputText}"</p>)
+                   filteredClients == 0 && loadingClients == false && inputText !== "" && (<p className="text-center my-5" style={{fontSize: "1.5rem"}}>No hay clientes que concuerden con la busqueda "{inputText}"</p>)
 
                     }
                     {// checke if there exist clients in the list
@@ -150,7 +150,7 @@ function ClientTable() {
                             </div>)}
                     { /** show Net Work error  */
 
-                        error.message && (<p className='text-center' style={{ color: "red", fontSize: "24px" }}> {error.name} || {error.code} || {error.message}</p>)
+                        error.message && loadingClients == false && (<p className='text-center' style={{ color: "red", fontSize: "24px" }}> {error.name} || {error.code} || {error.message}</p>)
                     }
                 </div>
             </div>

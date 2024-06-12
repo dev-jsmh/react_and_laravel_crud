@@ -26,7 +26,7 @@ export function CreateProduct() {
     const [productData, setProductData] = useState({
         name: "",
         model: "",
-        image:  {},
+        image: {},
         description: "",
         stock: 0
     });
@@ -45,9 +45,9 @@ export function CreateProduct() {
     // ========== post request ==========
     function postProduct(product) {
 
-        const config = { 'headers': {'Content-Type': 'multipart/form-data'}};
+        const config = { 'headers': { 'Content-Type': 'multipart/form-data' } };
         // send post request to back-end
-        axios.post(env.mainUrl + '/products', product, config )
+        axios.post(env.mainUrl + '/products', product, config)
             .then(res => console.log(res))
             .catch(error => console.log(error));
     }
@@ -77,17 +77,17 @@ export function CreateProduct() {
     }
 
     // =========== proccess the form 
-   async function handleForm(ev) {
+    function handleForm(ev) {
         ev.preventDefault();
 
         let valideFormData = validateForm(productData);
         //
-        if (valideFormData == true) {
+        if(valideFormData == true) {
             console.log(image_url); // ======== try to print the url of the image get from the form input type file
-            
+
             // add the image_url property to the productData object before posting
             productData.image = image_url;
-            await postProduct(productData);
+            postProduct(productData);
             navigate("/products");
 
         } else {
@@ -120,20 +120,20 @@ export function CreateProduct() {
                             <div className="mb-3">
                                 <label className="form-label" for="product_name">Nombre</label>
                                 <input onChange={(ev) => { handleInput(ev) }} className="form-control" id="product_name" type="text" name='name' value={productData.name} />
-                           {  errors.name && ( <p style={{color: "red"}} > { errors.name }</p> ) }
+                                {errors.name && (<p style={{ color: "red" }} > {errors.name}</p>)}
                             </div>
                             <div className="d-flex justify-content-between">
                                 <div className="col-5 mb-3">
                                     <label className="form-label" for="product_model">Modelo</label>
                                     <input onChange={(ev) => { handleInput(ev) }} className="form-control" id="product_model" type="text" name="model" value={productData.model} />
-                           {  errors.model && ( <p style={{color: "red"}} > { errors.model }</p> ) }
-                               
+                                    {errors.model && (<p style={{ color: "red" }} > {errors.model}</p>)}
+
                                 </div>
                                 <div className="col-5 mb-3">
                                     <label className="form-label" for="">Cantidad inicial</label>
                                     <input onChange={(ev) => { handleInput(ev) }} className="form-control" id="" type="number" name="stock" value={productData.stock} />
-                           {  errors.stock && ( <p style={{color: "red"}} > { errors.stock }</p> ) }
-                                
+                                    {errors.stock && (<p style={{ color: "red" }} > {errors.stock}</p>)}
+
                                 </div>
                             </div>
                         </div>
@@ -160,8 +160,8 @@ export function CreateProduct() {
                             <div className="mb-3">
                                 <label className="form-label" for="product_description">Descripción</label>
                                 <textarea onChange={(ev) => { handleInput(ev) }} className="form-control" id="product_description" name="description" value={productData.description}></textarea>
-                           {  errors.description && ( <p style={{color: "red"}} > { errors.description }</p> ) }
-                            
+                                {errors.description && (<p style={{ color: "red" }} > {errors.description}</p>)}
+
                             </div>
                             <div className="mb-3">
                                 <label className="form-label" for="product_image">imagen</label>
@@ -171,11 +171,11 @@ export function CreateProduct() {
                             <div className="mb-3">
                                 {
                                     image_url ? (
-                                <img src={URL.createObjectURL(image_url)} style={{ height: "5rem" }} />
+                                        <img src={URL.createObjectURL(image_url)} style={{ height: "5rem" }} />
 
-                                ) : (
-                                <img src={defaultImage} style={{ height: "5rem" }} />
-                                )
+                                    ) : (
+                                        <img src={defaultImage} style={{ height: "5rem" }} />
+                                    )
                                 }
                             </div>
                         </div>

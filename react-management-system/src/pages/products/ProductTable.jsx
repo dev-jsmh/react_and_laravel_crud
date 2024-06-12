@@ -110,8 +110,8 @@ export default function ProductTable() {
                             filteredProducts.map(product => {
                                 return (
                                     <div key={product?.id} className="col-sm-12 col-md-4 col-lg-3 p-2">
-                                        <div className="card">
-                                            <div className="card-body">
+                                        <div className="card card-bg-light">
+                                            <div className="card-body ">
                                                 <div className="col text-center mb-2">
                                                     {
                                                         product?.image_url ?
@@ -126,7 +126,8 @@ export default function ProductTable() {
 
                                                 </div>
                                                 <div className="col">
-                                                    <p>id: {product?.product_code}</p>
+                                                    <p>Id: {product?.id}</p>
+                                                    <p>Codigo: {product?.product_code}</p>
                                                     <p>Nombre: {product?.name}</p>
                                                     <p>Modelo: {product?.model}</p>
                                                     <p>Unidades disponibles: {product?.stock}</p>

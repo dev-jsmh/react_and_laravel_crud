@@ -5,43 +5,137 @@
  * Año 2024
  */
 
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import axios from 'axios';
-// this images if temporal
-import productImg from '../../../public/img/product_4.jpeg';
-import ProductModel from '../../models/ProductModel';
 import env from '../../env';
 
 export default function ModifyProduct() {
 
-    const [product, setProduct] = useState(new ProductModel());
-    const [image, setImage] = useState({});
+    
+    const [image, setImage] = useState();
     const { id } = useParams();
+    const navigate = useNavigate();
+    const [errors, setErrors] = useState({});
+    // object that encapsulates required product information 
+    const [old_Product, setOld_Product] = useState({
+        product_code: "",
+        name: "",
+        model: "",
+        image_url: "",
+        description: "",
+        stock: 0
+    });
+// object to store update information
+    const updatedProduct = {
+        product_code: "",
+        name: "",
+        model: "",
+        image: {},
+        description: "",
+        stock: 0
+    };
 
     useEffect(
         () => {
             axios.get(`${env.mainUrl}/products/${id}`)
                 .then(res => {
                     console.log(res.data);
-                    setProduct(res.data.product)
+                    setOld_Product(res.data.product)
                 })
                 .catch(error => console.log(error))
         }, []
     );
 
+    function handleInput(ev) {
+        const { name, value } = ev.target;
+
+        setOld_Product(
+            {
+                ...old_Product,
+                [name]: value
+            }
+        );
+    }
+
+    // makes a put request to modify the current product information
+    // pass and object of product as a parameter
+    function putProduct(productData) {
+
+        axios({
+            method: 'post',
+            url: `${env.mainUrl}/products/${id}`,
+            data: productData, 
+            headers: {'Content-Type': 'multipart/form-data'}
+        })
+        .then((res) => console.log(res.data))
+        .catch(error => console.log(error));
+    };
+    // pass as argument the object productData
+    function validateForm(productData) {
+        // create an other object to store the possible errors
+        const formErrors = {};
+        // validate the required fields in the form
+        if (productData.name == null || productData.name == "") {
+            formErrors.name = "El nombre es obligatorio";
+        }
+        if (productData.model == null || productData.model == "") {
+            formErrors.model = "El modelo es obligatorio";
+        }
+        if (productData.description == null || productData.description == "") {
+            formErrors.description = "La descripción es obligatoria";
+        }
+        if (productData.stock == null || productData.stock == 0) {
+            formErrors.stock = "La cantidad debe ser mayor a 0";
+        }
+        // set the new errors
+        setErrors(formErrors);
+
+        // if this expression is true that means there is no errors
+        return Object.keys(formErrors).length == 0;
+    }
+
     function handleForm(ev) {
         ev.preventDefault();
-        console.log(ev.target);
-        console.log(ev.target.product_code.value);
+        // check if the information about the product collect from the form is valid
+        const formIsValid = validateForm(old_Product);
+        // if true 
+        if (formIsValid) {
+            // _-------- set the values from the old fetch product to the update product
+            /*
+            add this _method to solve the problem when 
+            trying to make put request to modify an 
+            existing product information
+            */
+            updatedProduct._method = 'put';
+            updatedProduct.product_code = old_Product.product_code;
+            updatedProduct.name = old_Product.name;
+            updatedProduct.model = old_Product.model;
+            updatedProduct.description = old_Product.description;
+            updatedProduct.stock = old_Product.stock;
+            // adding image here below 
+            updatedProduct.image = image;
+            // print te update object 
+           console.log(updatedProduct);
+            // make put request and send data to the back-end 
+            putProduct(updatedProduct);
+            setTimeout(() => {
+                // finally navigate to the products table
+                navigate(`/products/${id}/details`);
+            }, 2500);
+
+        } else {
+            console.warn("There are some missing fields !");
+            console.warn(errors);
+        }
     };
 
     return (
         <>
             <nav className="navbar navbar-expand-md bg-dark sticky-top" data-bs-theme="dark">
                 <div className="container-fluid">
-                    <Link to="../">
+                    <Link to={`/products/${id}/details`}>
                         <i className="bi-arrow-left" style={{ fontSize: "1.5rem", fontWeight: "bold", color: "white" }}></i>
                     </Link>
                 </div>
@@ -49,31 +143,31 @@ export default function ModifyProduct() {
             <div className="container">
                 <h3 className='mt-3' > Modificar Información del producto </h3>
 
-                <img src={product?.image_url} alt="" style={{ height: 10 + 'rem', borderRadious: 0.3 + 'rem' }} />
+                <img src={old_Product?.image_url} alt={old_Product?.name} style={{ height: 10 + 'rem', borderRadious: 0.3 + 'rem' }} />
                 { /** execute a function to handle the form when submit event is generate */}
-                <form onSubmit={(ev) => { handleForm(ev) }} className="form-group" encType='multipart/form-data' >
+                <form onSubmit={(ev) => { handleForm(ev) }} className="form-group">
                     <div className="row mt-3">
                         <div className="col-md-6 col-12">
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="product_id">Id</label>
-                                <input className="form-control" id="product_id" name='product_id' type="number" value={product.id} disabled />
+                                <input className="form-control" id="product_id" name='product_id' type="number" value={old_Product.id} disabled />
                             </div>
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="product_code">Codigo producto</label>
-                                <input className="form-control" id="product_code" name='product_code' type="text" value={product?.product_code} disabled />
+                                <input onChange={(ev) => { handleInput(ev) }} className="form-control" id="product_code" type="text" name='product_code' value={old_Product?.product_code} />
                             </div>
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="product_name">Nombre</label>
-                                <input className="form-control" id="product_name" type="text" value={product.name} />
+                                <input onChange={(ev) => { handleInput(ev) }} className="form-control" id="product_name" type="text" name="name" value={old_Product.name} />
                             </div>
                             <div className="d-flex justify-content-between">
                                 <div className="col-5 mb-3">
                                     <label className="form-label" htmlFor="">Modelo</label>
-                                    <input className="form-control" id="" type="text" value={product.model} />
+                                    <input onChange={(ev) => { handleInput(ev) }} className="form-control" id="" type="text" name="model" value={old_Product.model} />
                                 </div>
                                 <div className="col-5 mb-3">
                                     <label className="form-label" htmlFor="">Cantidad inicial</label>
-                                    <input className="form-control" id="" type="number" value={product.stock} />
+                                    <input onChange={(ev) => { handleInput(ev) }} className="form-control" id="" type="number" name="stock" value={old_Product.stock} />
                                 </div>
                             </div>
                         </div>
@@ -99,32 +193,27 @@ export default function ModifyProduct() {
 
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="product_description">Descripción</label>
-                                <textarea className="form-control" id="product_description" value={product.description}></textarea>
+                                <textarea onChange={(ev) => { handleInput(ev) }} className="form-control" id="product_description" name="description" value={old_Product.description}></textarea>
                             </div>
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="">imagen</label>
-                                <input onChange={(ev) => { setImage(ev.target.files[0]) }} className="form-control" id="" type="file" name='image' />
+                                <label className="form-label" htmlFor="product_image">imagen</label>
+                                <input onChange={(ev) => { setImage(ev.target.files[0]) }} className="form-control" id="product_image" type="file" name='image' />
                             </div>
                             <div className="mb-3">
                                 { // render the product image if this existe 
 
 
-                                    product?.image_url ?
-                                        (
-                                            <img className="text-center"
-                                                src={product?.image_url}
-                                                style={{ height: 5 + "rem", borderRadius: 0.4 + 'rem' }} alt="purificador de aguas" />
-
-                                        ) : (  // else render a predefined default image
+                                     image !== undefined && (  // else render a predefined default image
 
                                             <img className="text-center"
-                                                src={productImg}
+
+                                                src={URL.createObjectURL(image)}
                                                 style={{ height: 5 + "rem", borderRadius: 0.4 + 'rem' }} alt="purificador de aguas" />
 
-                                        )
+                                        ) 
                                 }
 
-                              
+
                             </div>
                         </div>
                     </div>

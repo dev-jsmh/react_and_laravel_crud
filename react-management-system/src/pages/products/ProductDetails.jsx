@@ -6,7 +6,8 @@
  */
 
 import env from '../../env';
-import { Link, useParams } from 'react-router-dom';
+import Spinner from '../../components/spinner';
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
@@ -19,26 +20,62 @@ import productImg from '../../../public/img/product_4.jpeg';
 
 function ProductDetails() {
 
+    // extract the product id from the url 
+    const { id } = useParams();
+    const navigate = useNavigate();
     // product state 
-    const [product, setProduct ] = useState( new ProductModel() );
-// extract the product id from the url 
-const {id} = useParams();
+    const [product, setProduct] = useState(new ProductModel());
+    const [deleting, setDeletign] = useState(false);
+    // Get request to fecth a product by its id
+    useEffect(
+        () => {
 
-// Get request to fecth a product by its id
-useEffect( 
-    () =>{
+            axios.get(`${env.mainUrl}/products/${id}`)
+                // print result in console
+                .then(res => {
+                    console.log(res.data),
+                        // set the fetched product data to the product state variable
+                        setProduct(res.data.product)
+                }) // log the error to the console
+                .catch(error => console.log(error))
 
-        axios.get( `${env.mainUrl}/products/${id}`)
-        // print result in console
-        .then(res => {
-            console.log(res.data),
-            // set the fetched product data to the product state variable
-            setProduct(res.data.product)
-        } ) // log the error to the console
-        .catch( error => console.log(error))
+        }, []);
 
-    } , []);
+    // ------------------- same function to close modals manually ----------------
 
+    const closeModal = () => {
+        /**
+         *
+        
+                document.body.style = "";
+                document.body.style.cssText = "";
+                document.body.classList.remove("modal-open");
+                 */
+              
+        document.getElementById("delete_product").classList.remove("show");
+        document.getElementById("delete_product").style.display = "none";
+
+    }
+    // --------------------- functionality to delete product ---------------------
+    const deleteProduct = () => {
+        // change the value to true so the spinner is shown
+        setDeletign(true);
+        // make delete request
+        axios.delete(`${env.mainUrl}/products/${id}`)
+            .then((res) => {
+                console.log(res);
+                // when get the response than change the value 
+                // to false so the spinner is not shown any more after 2 secunds
+                setTimeout(() => {
+                    setDeletign(false);
+                    closeModal();
+                    navigate("/products");
+                }, 2000);
+
+            })
+            .catch(error => console.log(error));
+
+    }
 
     return (
         <>
@@ -57,32 +94,32 @@ useEffect(
                     <div className="col-md-4 col-12 mb-2">
 
                         { // render the product image if this existe 
-                           
+
 
                             product?.image_url ?
-                            (
-                                <img className="text-center"
-                                src={product?.image_url}
-                                style={{ height: 10 + "rem", borderRadius: 1 + 'rem' }} alt="purificador de aguas" />
-                            ) : (  // else render a predefined default image
-                                <img className="text-center"
-                                src={productImg}
-                                style={{ height: 10 + "rem", borderRadius: 1 + 'rem' }} alt="purificador de aguas" />
-                            )
+                                (
+                                    <img className="text-center"
+                                        src={product?.image_url}
+                                        style={{ height: 10 + "rem", borderRadius: 1 + 'rem' }} alt="purificador de aguas" />
+                                ) : (  // else render a predefined default image
+                                    <img className="text-center"
+                                        src={productImg}
+                                        style={{ height: 10 + "rem", borderRadius: 1 + 'rem' }} alt="purificador de aguas" />
+                                )
                         }
                     </div>
                     <div className="col-md-4 col-12">
-                    <div className="mb-3">
-                            <p>Id producto: {  product.id }</p>
+                        <div className="mb-3">
+                            <p>Id producto: {product.id}</p>
                         </div>
                         <div className="mb-3">
-                            <p>Codigo producto: {  product.product_code }</p>
+                            <p>Codigo producto: {product.product_code}</p>
                         </div>
                         <div className="mb-3">
-                            <p>Nombre: {  product.name }</p>
+                            <p>Nombre: {product.name}</p>
                         </div>
                         <div className="mb-3">
-                            <p>Modelo: {  product.model }</p>
+                            <p>Modelo: {product.model}</p>
                         </div>
 
                     </div>
@@ -91,7 +128,7 @@ useEffect(
                             <p>Valor de compra: 150.000</p>
                         </div>
                         <div className="col-5 mb-3">
-                            <p>Unidades disponibles: {  product.stock } </p>
+                            <p>Unidades disponibles: {product.stock} </p>
                         </div>
                     </div>
                     <div className="col-md-6 col-12">
@@ -108,10 +145,17 @@ useEffect(
                         */}
                         <div className="mb-3">
                             <label className="form-label" htmlFor="">Descripción</label>
-                            <textarea className="form-control" id="" value={  product.description } >  </textarea>
+                            <textarea className="form-control" id="" value={product.description} >  </textarea>
                         </div>
 
                     </div>
+                    {
+                                deleting && (
+                                    <div className="text-center p-4">
+                                        <Spinner></Spinner>
+                                    </div>
+                                )
+                            }
                     <div className="col-md-6 col-12 text-center">
                         {/**  <!-- compra de producto --> */}
                         <button className="btn btn-success my-5 mx-2" data-bs-toggle="modal"
@@ -123,12 +167,14 @@ useEffect(
                         <Link className="btn btn-success my-5 mx-2" type="button" to={`/products/${id}/modify`}>
                             <i className="bi bi-save"></i>Modificar
                         </Link>
+
+                        <button className='btn btn-danger' data-bs-toggle="modal" data-bs-target="#delete_product"><i className='bi bi-trash'></i></button>
                     </div>
                 </div>
             </div>
 
             {/** <!-- modal for add stock --> */}
-            <div className="modal fade" id="modal_add_stock" data-bs-backdrop="static">
+            <div className="modal fade" id="modal_add_stock">
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -179,6 +225,23 @@ useEffect(
                         </div>
                     </div>
                 </div>
+            </div>
+
+            { /** modal to confirm delete action  */}
+            <div className="modal fade" id="delete_product">
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
+                        <div className="modal-body">
+                            <p>¿ Esta seguro de querer eliminar el producto ?</p>
+                           
+                            <div className="text-center">
+                                <button className='btn btn-primary mx-1' data-bs-dismiss="modal">NO</button>
+                                <button className='btn btn-secondary mx-1' onClick={deleteProduct} data-bs-dismiss="modal">si</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </>
     );
